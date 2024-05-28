@@ -6,12 +6,13 @@
 import scrapy
 
 
-class BooksCrawlerItem(scrapy.Item):
+class SplashProjectItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    BookTitle = scrapy.Field()
-    # BookPrice = scrapy.Field()
-    # BookRating = scrapy.Field()
+    productname = scrapy.Field()
+    productprice = scrapy.Field()
+    reviewcount = scrapy.Field()
     image_urls = scrapy.Field()
     images = scrapy.Field()
-    pass
+    files = scrapy.Field()
+    file_urls = scrapy.Field()

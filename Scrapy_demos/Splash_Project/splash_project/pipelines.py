@@ -6,14 +6,11 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
-from scrapy.pipelines.images import ImagesPipeline
 
-class BooksCrawlerPipeline:
+
+class SplashProjectPipeline:
     def process_item(self, item, spider):
         return item
     
 
-class Image_downloadurl_Rename(ImagesPipeline):
-    def file_path(self, request, response=None, info=None, *, item=None):
-        # return f"full/{image_guid}.jpg"
-        return item['BookTitle'] + ".jpg"
+    

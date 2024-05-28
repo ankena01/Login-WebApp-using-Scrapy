@@ -11,10 +11,13 @@ __pycache__/
 env/
 venv/
 ENV/
+bypass_Verify/
+downloaded_images/
 build/
 develop-eggs/
 dist/
 downloads/
+downloaded_files/
 eggs/
 .eggs/
 lib/

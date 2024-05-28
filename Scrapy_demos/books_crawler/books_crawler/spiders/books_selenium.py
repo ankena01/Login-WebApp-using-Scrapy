@@ -8,6 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 import time
+from ..items import BooksCrawlerItem
 
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
@@ -27,47 +28,62 @@ class BooksSeleniumSpider(scrapy.Spider):
         sel = Selector(text=self.driver.page_source)
 
         # Extract all the book urls
-        books_urls = sel.xpath("//h3/a/@href").get()
+        books_urls = sel.xpath("//h3/a/@href").extract()
 
         for book_url in books_urls:
+            print("-------------- inside start request ------------------")
+            # print(book_url)
             url = BooksSeleniumSpider.base_url + book_url
             yield Request(url, callback=self.parse)
 
 
         
 
-        while True:     
-            try:
-                ## Move to next page by cicking on next button with selenium click method
+        # while True:     
+        #     try:
+        #         ## Move to next page by cicking on next button with selenium click method
 
-                next_page = self.driver.find_element(By.XPATH, "//li[@class='next']/a[@href]")
-                self.logger.info("Waiting for 3 seconds...")
-                time.sleep(3)
-                next_page.click()
-                books_urls = sel.xpath("//h3/a/@href").get()
+        #         next_page = self.driver.find_element(By.XPATH, "//li[@class='next']/a[@href]")
+        #         self.logger.info("Waiting for 3 seconds...")
+        #         time.sleep(3)
+        #         next_page.click()
+        #         books_urls = sel.xpath("//h3/a/@href").get()
 
-                for book_url in books_urls:
+        #         for book_url in books_urls:
                     
-                    url = BooksSeleniumSpider.base_url + book_url
-                    yield Request(url, callback=self.parse)
+        #             url = BooksSeleniumSpider.base_url + book_url
+        #             yield Request(url, callback=self.parse)
 
-            except NoSuchElementException:
-                self.logger.info("No more pages to crawl!!!")
-                self.driver.quit()
-                break
+        #     except NoSuchElementException:
+        #         self.logger.info("No more pages to crawl!!!")
+        #         self.driver.quit()
+        #         break
  
 
     def parse(self, response):
+        # pass
         # Extract Book Title and Book Page URL
         #### The selector for book title is not working
         # book_title  = response.xpath("//div[@class='col-sm-6 product_main']/h1/text()").get()
         book_title  = response.xpath("//h1/text()").get()
         book_page_url = response.request.url
+        image = response.xpath("//div[@class='col-sm-6']/div[@id='product_gallery']//img/@src").get()
+        image_url = image.replace("../../", "https://books.toscrape.com/") 
         
 
-        yield {'Book Title' : book_title,
-               'Book Page URL' : book_page_url}
+        # yield {'Book Title' : book_title,
+        #        'Book Page URL' : book_page_url,
+        #     #    'Image url' : image_url,
+        #     "image_urls" : [image_url]}
         
+        items = BooksCrawlerItem()
+        items['BookTitle'] = book_title
+        items['image_urls'] = [image_url]
+        yield items
+
+
+
+
 
     # def close(self,reason):
     #     # put any code that needs to be run when spider is closed

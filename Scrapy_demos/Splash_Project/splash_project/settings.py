@@ -1,4 +1,4 @@
-# Scrapy settings for books_crawler project
+# Scrapy settings for splash_project project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,17 +7,36 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "books_crawler"
 
-SPIDER_MODULES = ["books_crawler.spiders"]
-NEWSPIDER_MODULE = "books_crawler.spiders"
+##### --------------------------- SPLASH SETTINGS-------------------------------
+
+# SPLASH_URL = 'http://127.0.0.1:8070'
+# DOWNLOADER_MIDDLEWARES = {
+#     'scrapy_splash.SplashCookiesMiddleware': 723,
+#     'scrapy_splash.SplashMiddleware': 725,
+#     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+# }
+# SPIDER_MIDDLEWARES = {
+#     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+# }
+
+# DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+# HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+
+##### ----------------------------------------------------------
+
+BOT_NAME = "splash_project"
+LOG_FILE = "scrapy.log"
+SPIDER_MODULES = ["splash_project.spiders"]
+NEWSPIDER_MODULE = "splash_project.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "books_crawler (+http://www.yourdomain.com)"
+#USER_AGENT = "splash_project (+http://www.yourdomain.com)"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = False
+ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -30,8 +49,11 @@ ROBOTSTXT_OBEY = False
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
 
+CONCURRENT_REQUESTS_PER_DOMAIN = 2
+CONCURRENT_REQUESTS_PER_IP = 2
+
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = True
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
@@ -45,13 +67,13 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    "books_crawler.middlewares.BooksCrawlerSpiderMiddleware": 543,
+#    "splash_project.middlewares.SplashProjectSpiderMiddleware": 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    "books_crawler.middlewares.BooksCrawlerDownloaderMiddleware": 543,
+#    "splash_project.middlewares.SplashProjectDownloaderMiddleware": 543,
 #}
 
 # Enable or disable extensions
@@ -60,16 +82,20 @@ ROBOTSTXT_OBEY = False
 #    "scrapy.extensions.telnet.TelnetConsole": None,
 #}
 
+ITEM_PIPELINES = {"scrapy.pipelines.images.ImagesPipeline": 1,
+                  "scrapy.pipelines.files.FilesPipeline": 2}
+
+FILES_STORE = "download_files"
+IMAGES_STORE = "download_images"
+
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    "books_crawler.pipelines.BooksCrawlerPipeline": 300,
+#    "splash_project.pipelines.SplashProjectPipeline": 300,
 #}
 
-ITEM_PIPELINES = {"scrapy.pipelines.images.ImagesPipeline": 1,
-                  "books_crawler.pipelines.Image_downloadurl_Rename" : 2}
-IMAGES_STORE = "downloaded_images"
-
+# ITEM_PIPELINES = {"scrapy.pipelines.images.ImagesPipeline": 1}
+# IMAGES_STORE = "/images"
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
